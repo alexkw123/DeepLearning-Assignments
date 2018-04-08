@@ -4,7 +4,7 @@ function J = ComputeCost(X, Y, W, b, lambda)
 % Y: one-hot label for the column (Kxn)
 [~, n] = size(X);
 P = EvaluateClassifier(X, W, b);
-J = -log(sum(Y'*P, 1))/n + lambda*sumsqr(W);
+J = -sum(log(sum(Y.*P, 1)))/n + lambda*sumsqr(W);
 end
 
 function [s,n] = sumsqr(x)
