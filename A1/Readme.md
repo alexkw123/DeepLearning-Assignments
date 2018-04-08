@@ -90,6 +90,12 @@ Here is how we update ```W,b``` in ```MiniBatchGD```:
 
 ## 3. Results
 
+Some conclusions:
+
+1. The correct learning rate is very important. From parameter setting 1, we can see that the learning rate is too fast so that the learning process is very unstable, i.e., the cost is varying instead of converging.
+
+2. The regularization term can avoid overfitting. But too large regularization term will increase the bias.
+
 #### 3.1 Parameter setting1
 
 Parameters:
