@@ -1,9 +1,6 @@
 % ------- training process ---------
 % read in training, validataion and test data
-% (a)improvement1 0.3770
-% (b)improvement2 0.3784
-% (d)improvement3 0.3812
-% (e)improvement4 0.3846
+% 0.4030
 [X_train1, Y_train1, y_train1] = LoadBatch('data_batch_1.mat');
 [X_train2, Y_train2, y_train2] = LoadBatch('data_batch_2.mat');
 [X_train3, Y_train3, y_train3] = LoadBatch('data_batch_3.mat');
