@@ -1,20 +1,14 @@
-function [grad_W, grad_b] = ComputeGradients(X, Y, W, b, lambda, s)
+function [grad_W, grad_b] = ComputeGradients(X, Y, P, W, lambda, K)
 
-[~, n] = size(X);
-grad_W = W;
-grad_b = b;
+[d, n] = size(X);
+grad_W = zeros(K, d);
+grad_b = zeros(K, 1);
 
 for i = 1:n
     x = X(:, i);
-    [~, yi] = max(Y(:, i));
-    
-    temp = bsxfun(@minus, s(:,i), s(yi,i));
-    temp = bsxfun(@plus, temp, 1);
-    l = bsxfun(@max, 0, temp);
-    l = double(l>0);
-    l(yi) = -(sum(l)-1);
-    
-    g = l';
+    y = Y(:, i);
+    p = P(:, i);
+    g = -(y-p)';
     grad_b = grad_b + g';
     grad_W = grad_W + g' * x';
 end
