@@ -3,13 +3,15 @@ function J = ComputeCost(X, Y, W, b, lambda)
 % X: an image (dxn)
 % Y: one-hot label for the column (Kxn)
 [~, n] = size(X);
-P = EvaluateClassifier(X, W, b);
-J = -sum(log(sum(Y.*P, 1)))/n + lambda*sumsqr(W);
+s = EvaluateClassifier(X, W, b);
+f = zeros(n,1);
+% calculate max(0,s-sy+1)
+for i = 1:n
+    [~, yi] = max(Y(:, i));
+    temp = bsxfun(@minus, s(:,i), s(yi,i));
+    temp = bsxfun(@plus, temp, 1);
+    l = bsxfun(@max, 0, temp);
+    f(i,1) = sum(l);
 end
-
-function [s,n] = sumsqr(x)
-x = x(:);
-t = isfinite(x);
-s = sum(x(t).^2);
-n = sum(t);
+J = sum(f)/n + lambda*sum(sum((W.^2),1));
 end
