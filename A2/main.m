@@ -1,16 +1,16 @@
 % % ----------- testing -------------
-% test if the ComputeCost and ComputeGradients functions are right
-lambda = 0;
-[P, h, s1] = EvaluateClassifier(X_train(:, 1:5), W, b);
-% function given by professor
-[ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda, 1e-6);
-% implemented function
-[grad_W, grad_b] = ComputeGradients(X_train(:, 1:5), Y_train(:, 1:5), P, h, s1, W, lambda, K, m);
-% relative error
-error_b1 = norm(grad_b{1} - ngrad_b{1})/max(eps,norm(grad_b{1})+norm(ngrad_b{1}));
-error_b2 = norm(grad_b{2} - ngrad_b{2})/max(eps,norm(grad_b{2})+norm(ngrad_b{2}));
-error_W1 = norm(grad_W{1} - ngrad_W{1})/max(eps,norm(grad_W{1})+norm(ngrad_W{1}));
-error_W2 = norm(grad_W{2} - ngrad_W{2})/max(eps,norm(grad_W{2})+norm(ngrad_W{2}));
+% % test if the ComputeCost and ComputeGradients functions are right
+% lambda = 0;
+% [P, h, s1] = EvaluateClassifier(X_train(:, 1:5), W, b);
+% % function given by professor
+% [ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda, 1e-6);
+% % implemented function
+% [grad_W, grad_b] = ComputeGradients(X_train(:, 1:5), Y_train(:, 1:5), P, h, s1, W, lambda, K, m);
+% % relative error
+% error_b1 = norm(grad_b{1} - ngrad_b{1})/max(eps,norm(grad_b{1})+norm(ngrad_b{1}));
+% error_b2 = norm(grad_b{2} - ngrad_b{2})/max(eps,norm(grad_b{2})+norm(ngrad_b{2}));
+% error_W1 = norm(grad_W{1} - ngrad_W{1})/max(eps,norm(grad_W{1})+norm(ngrad_W{1}));
+% error_W2 = norm(grad_W{2} - ngrad_W{2})/max(eps,norm(grad_W{2})+norm(ngrad_W{2}));
 
 % ------- training process ---------
 % read in training, validataion and test data
@@ -34,9 +34,14 @@ y_train = y_train(1:100);
 m = 50;
 [d, N] = size(X_train);
 [W, b, K] = InitializeParameters(X_train, y_train, m);
+v_W1 = zeros(m, d);
+v_b1 = zeros(m, 1);
+v_W2 = zeros(K, m);
+v_b2 = zeros(K, 1);
+rho = 0.99;
 
 % set training parameters
-lambda=0; n_epochs=200; n_batch=10; eta=.01;
+lambda=0; n_epochs=200; n_batch=10; eta=.001;
 
 % train and validation argument
 cost_train = zeros(n_epochs, 1);
@@ -52,6 +57,16 @@ for i = 1 : n_epochs
     Ybatch = Y_train(:, inds);
     % get mini-batch
     [W, b] = MiniBatchGD(Xbatch, Ybatch, eta, W, b, lambda, m);
+    % momentum
+    v_W1 = rho * v_W1 + eta * W{1};
+    v_b1 = rho * v_b1 + eta * b{1};
+    v_W2 = rho * v_W2 + eta * W{2};
+    v_b2 = rho * v_b2 + eta * b{2};
+    % update the weights and the bias.
+    W{1} = W{1} - v_W1;
+    b{1} = b{1} - v_b1;
+    W{2} = W{2} - v_W2;
+    b{2} = b{2} - v_b2;
     end
     
     cost_train(i) = (ComputeCost(X_train, Y_train, W, b, lambda));
