@@ -30,53 +30,47 @@ X_train = X_train(:,1:100);
 Y_train = Y_train(:,1:100);
 y_train = y_train(1:100);
 
-% set up data structure
-m = 50;
-[d, N] = size(X_train);
-[W, b, K] = InitializeParameters(X_train, y_train, m);
-v_W1 = zeros(m, d);
-v_b1 = zeros(m, 1);
-v_W2 = zeros(K, m);
-v_b2 = zeros(K, 1);
-rho = 0.99;
+% initialize the network
+% rng(9001);
+[W, b, K, rho, m] = InitializeParameters(X_train, y_train);
 
 % set training parameters
-lambda=0; n_epochs=200; n_batch=10; eta=.001;
+n_epochs=200; n_batch=10;
 
-% train and validation argument
-cost_train = zeros(n_epochs, 1);
-cost_val = zeros(n_epochs, 1);
+times = 1;
+result = zeros(3, times);
+lmin = -6; lmax = -2; emin = -3; emax = -1;
 
-% training
-for i = 1 : n_epochs
-    for j = 1 : N/n_batch
-    j_start = (j-1) * n_batch + 1;
-    j_end = j * n_batch;
-    inds = j_start : j_end;
-    Xbatch = X_train(:, inds);
-    Ybatch = Y_train(:, inds);
-    % get mini-batch
-    [W, b] = MiniBatchGD(Xbatch, Ybatch, eta, W, b, lambda, m);
-    % momentum
-    v_W1 = rho * v_W1 + eta * W{1};
-    v_b1 = rho * v_b1 + eta * b{1};
-    v_W2 = rho * v_W2 + eta * W{2};
-    v_b2 = rho * v_b2 + eta * b{2};
-    % update the weights and the bias.
-    W{1} = W{1} - v_W1;
-    b{1} = b{1} - v_b1;
-    W{2} = W{2} - v_W2;
-    b{2} = b{2} - v_b2;
-    end
+for i = 1:times
+%     l = lmin + (lmax - lmin)*rand(1, 1);
+    lambda = 0;
     
-    cost_train(i) = (ComputeCost(X_train, Y_train, W, b, lambda));
-    cost_val(i) = ComputeCost(X_val, Y_val, W, b, lambda);
+%     e = emin + (emax - emin)*rand(1, 1);
+    eta = 0.01;
+
+    % training
+    [W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, m, rho);
+
+    best_on_val = min(cost_val);
+    result(1, i) = lambda;
+    result(2, i) = eta;
+    result(3, i) = best_on_val;
+    
+    disp(i);
 end
 
+% write to file
+
+disp(result);
+
+% fid=fopen('Result.txt','a+');
+% fprintf(fid,'%g\t %g\t %g\n',result);
+% fclose(fid);
+
 % calculate the accuracy
-[X, ~, y] = LoadBatch('test_batch.mat'); % 1
-acc = ComputeAccuracy(X, y, W, b);
-disp(acc);
+% [X, ~, y] = LoadBatch('test_batch.mat'); % 1
+% acc = ComputeAccuracy(X, y, W, b);
+% disp(acc);
 
 % display the images
 % mt = [];
@@ -91,3 +85,4 @@ disp(acc);
 % plot the cost function
 inds = 1:n_epochs;
 plot(inds, cost_train, inds, cost_val);
+disp(cost_train);

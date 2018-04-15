@@ -1,4 +1,6 @@
-function [W, b, K] = InitializeParameters(X_train, y_train, m)
+function [W, b, K, rho, m] = InitializeParameters(X_train, y_train)
+m = 50;
+rho = 0.9;
 % initialize parameters
 [d, ~] = size(X_train);
 K = length(min(y_train):max(y_train));
