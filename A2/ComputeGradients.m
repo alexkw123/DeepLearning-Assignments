@@ -1,4 +1,4 @@
-function [grad_W, grad_b] = ComputeGradients(X, Y, P, h, s1, W, lambda, K, m)
+function [grad_W, grad_b] = ComputeGradients(X, Y, P, H, S1, W, lambda, K, m)
 
 [d, n] = size(X);
 W1 = W{1}; W2 = W{2};
@@ -9,6 +9,8 @@ for i = 1:n
     x = X(:, i);
     y = Y(:, i);
     p = P(:, i);
+    h = H(:, i);
+    s1 = S1(:, i);
     
     g = -(y-p)';
     
