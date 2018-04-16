@@ -26,63 +26,48 @@ X_val = X_val - repmat(mean_X, [1, size(X_val, 2)]);
 X_test = X_test - repmat(mean_X, [1, size(X_test, 2)]);
 
 % only use 100 examples
-X_train = X_train(:,1:100);
-Y_train = Y_train(:,1:100);
-y_train = y_train(1:100);
+X_train = X_train(:,1:1000);
+Y_train = Y_train(:,1:1000);
+y_train = y_train(1:1000);
 
 % initialize the network
 % rng(9001);
-[W, b, K, rho, m] = InitializeParameters(X_train, y_train);
 
 % set training parameters
-n_epochs=200; n_batch=10;
+n_epochs=15; n_batch=100;
 
-times = 1;
-result = zeros(3, times);
-lmin = -6; lmax = -2; emin = -3; emax = -1;
+times = 100;
+result = zeros(4, times);
+% lmin = -6; lmax = -1; emin = log10(0.003); emax = log10(0.5); % coarse
+lmin = log10(4e-6); lmax = log10(4e-5); emin = log10(0.1); emax = log10(0.12); % fine
+% lambda = 0.9; eta = 0.01;
 
 for i = 1:times
-%     l = lmin + (lmax - lmin)*rand(1, 1);
-    lambda = 0;
+    l = lmin + (lmax - lmin)*rand(1, 1);
+    lambda = 10^l;
     
-%     e = emin + (emax - emin)*rand(1, 1);
-    eta = 0.01;
-
+    e = emin + (emax - emin)*rand(1, 1);
+    eta = 10^e;
+%     eta = e;
     % training
+    [W, b, K, rho, m] = InitializeParameters(X_train, y_train);
     [W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, m, rho);
-
+    
+    acc_on_val = ComputeAccuracy(X_val, y_val, W, b);
+    
     best_on_val = min(cost_val);
     result(1, i) = lambda;
     result(2, i) = eta;
     result(3, i) = best_on_val;
+    result(4, i) = acc_on_val;
     
     disp(i);
 end
 
 % write to file
 
-disp(result);
+% disp(cost_train);
 
-% fid=fopen('Result.txt','a+');
-% fprintf(fid,'%g\t %g\t %g\n',result);
-% fclose(fid);
-
-% calculate the accuracy
-% [X, ~, y] = LoadBatch('test_batch.mat'); % 1
-% acc = ComputeAccuracy(X, y, W, b);
-% disp(acc);
-
-% display the images
-% mt = [];
-% for i=1:10
-%   im = reshape(W(i, :), 32, 32, 3);
-%   s_im{i} = (im-min(im(:)))/(max(im(:))-min(im(:)));
-%   s_im{i} = permute(s_im{i}, [2, 1, 3]);
-%   mt = [mt s_im{i}];
-% end
-% montage(mt);
-
-% plot the cost function
-inds = 1:n_epochs;
-plot(inds, cost_train, inds, cost_val);
-disp(cost_train);
+fid=fopen('Result.txt','a+');
+fprintf(fid,'%g\t%g\t%g\t%g\n',result);
+fclose(fid);

@@ -26,7 +26,6 @@ for i = 1 : n_epochs
     [P, h, s1] = EvaluateClassifier(Xbatch, W, b);
     [K, ~] = size(Ybatch);
     [grad_W, grad_b] = ComputeGradients(Xbatch, Ybatch, P, h, s1, W, lambda, K, m);
-%     [W, b] = MiniBatchGD(Xbatch, Ybatch, eta, W, b, lambda, m, rho);
     % momentum
     v_W1 = rho * v_W1 + eta * grad_W{1};
     v_b1 = rho * v_b1 + eta * grad_b{1};
@@ -40,15 +39,12 @@ for i = 1 : n_epochs
     end
     
     cost_train(i) = ComputeCost(X_train, Y_train, W, b, lambda);
+    cost_val(i) = ComputeCost(X_val, Y_val, W, b, lambda);
     % abort when training cost is too large
     if cost_train(i) > 3 * original_training_cost
         break;
     end
     
-    cost_val(i) = ComputeCost(X_val, Y_val, W, b, lambda);
-    
     % decay learning rate by 0.95
-%     if mod(i, 10) == 0
-%         eta = 0.95 * eta;
-%     end
+    eta = 0.9 * eta;
 end

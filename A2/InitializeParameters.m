@@ -5,7 +5,7 @@ rho = 0.9;
 [d, ~] = size(X_train);
 K = length(min(y_train):max(y_train));
 
-rng(1);
+% rng(1);
 stanDev = 0.001;
 W1 = stanDev*randn(m,d);
 W2 = stanDev*randn(K,m);
