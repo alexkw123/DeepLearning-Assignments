@@ -56,16 +56,6 @@ lambda = 2.24e-05; eta = 0.108993;
 acc = ComputeAccuracy(X_test, y_test, W, b);
 disp(acc);
 
-% display the images
-% mt = [];
-% for i=1:10
-%   im = reshape(W(i, :), 32, 32, 3);
-%   s_im{i} = (im-min(im(:)))/(max(im(:))-min(im(:)));
-%   s_im{i} = permute(s_im{i}, [2, 1, 3]);
-%   mt = [mt s_im{i}];
-% end
-% montage(mt);
-
 % plot the cost function
 inds = 1:n_epochs;
 plot(inds, cost_train, inds, cost_val);
