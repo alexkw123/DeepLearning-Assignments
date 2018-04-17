@@ -37,7 +37,6 @@ X_test = X_test - repmat(mean_X, [1, size(X_test, 2)]);
 
 % set training parameters
 n_epochs=30; n_batch=230;  % 0.4442   %0.5005
-% n_epochs=30; n_batch=300;
 
 lambda = 2.24e-05; eta = 0.108993;
 % lambda = 1e-5; eta = 0.025;
