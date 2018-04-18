@@ -24,6 +24,10 @@
 % Y_train(:, split:N) = [];
 % y_train(split:N) = [];
 
+X_train = X_train(:,1:1000);
+Y_train = Y_train(:,1:1000);
+y_train = y_train(1:1000);
+
 % transform training data to have zero mean
 mean_X = mean(X_train, 2);
 X_train = X_train - repmat(mean_X, [1, size(X_train, 2)]);
@@ -36,10 +40,15 @@ X_test = X_test - repmat(mean_X, [1, size(X_test, 2)]);
 [W, b, K, rho, m] = InitializeParameters(X_train, y_train);
 
 % set training parameters
-n_epochs=10; n_batch=250;  % 0.4442   %0.5005
+% n_epochs=10; n_batch=250;  % 0.4442   %0.5005
 
-lambda = 3.24e-05; eta = 0.108993;  % 0.4576
+% lambda = 3.24e-05; eta = 0.108993;  % 0.4576
 % lambda = 9.21E-05; eta = 0.135561;  % 0.4351
+
+% n_epochs = 10; n_batch = 100; lambda = 2.24e-05; eta = 0.108993;
+% n_epochs = 10; n_batch = 100; lambda = 1.24e-05; eta = 0.118811;
+% n_epochs = 10; n_batch = 100; lambda = 3.91e-05; eta = 0.119100;
+n_epochs = 10; n_batch = 100; lambda = 3.91e-05; eta = 0.119100;
 
 % training
 [W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, m, rho);

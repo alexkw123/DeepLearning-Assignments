@@ -23,9 +23,9 @@ for i = 1:n
     g = g * W2;
     
     % ReLU
-%     v = double(s1>0);
+    v = double(s1>0);
     % tanh
-    v = 1-(tanh(s1)).^2;
+%     v = 1-(tanh(s1)).^2;
     
     temp = diag(v);
     g = g * temp;

@@ -6,9 +6,9 @@ function [P, h, s1] = EvaluateClassifier(X, W, b)
 s1 = W{1} * X;
 s1 = bsxfun(@plus, s1, b{1});
 % ReLU
-% h = bsxfun(@max, 0, s1);
+h = bsxfun(@max, 0, s1);
 % tanh
-h = arrayfun(@(x) tanh(x),s1);
+% h = arrayfun(@(x) tanh(x),s1);
 s = W{2} * h;
 s = bsxfun(@plus, s, b{2});
 P = bsxfun(@rdivide, exp(s), sum(exp(s), 1));
