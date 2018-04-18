@@ -34,12 +34,12 @@ y_train = y_train(1:1000);
 % rng(9001);
 
 % set training parameters
-n_epochs=15; n_batch=100;
+n_epochs=10; n_batch=100;
 
-times = 100;
+times = 50;
 result = zeros(4, times);
 % lmin = -6; lmax = -1; emin = log10(0.003); emax = log10(0.5); % coarse
-lmin = log10(4e-6); lmax = log10(4e-5); emin = log10(0.1); emax = log10(0.12); % fine
+lmin = log10(4e-6); lmax = log10(4e-1); emin = log10(0.1); emax = log10(0.25); % fine
 % lambda = 0.9; eta = 0.01;
 
 for i = 1:times

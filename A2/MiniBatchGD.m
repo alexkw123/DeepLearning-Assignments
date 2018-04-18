@@ -8,6 +8,11 @@ cost_val = zeros(n_epochs, 1);
 
 original_training_cost = ComputeCost(X_train, Y_train, W, b, lambda);
 
+% keep a record of the best model
+% best_W = W;
+% best_b = b;
+% best_val_cost = 10;
+
 % training
 for i = 1 : n_epochs
     % initialize momentum
@@ -45,6 +50,16 @@ for i = 1 : n_epochs
         break;
     end
     
+    % record best model
+%     if cost_val(i) < best_val_cost
+%         best_W = W;
+%         best_b = b;
+%         best_val_cost = cost_val(i);
+%     end
+    
     % decay learning rate by 0.95
-    eta = 0.9 * eta;
+%     if mod(i, 10) == 0
+%         eta = 0.1 * eta;
+%     end
+    eta = 0.8 * eta;
 end
