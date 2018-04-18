@@ -21,12 +21,14 @@ for i = 1:n
     grad_W2 = grad_W2 + g' * h';
     
     g = g * W2;
-    [~, M] = size(g);
-    diag = zeros(M);
-    for j = 1:M
-        diag(j,j) = double(s1(j)>0);
-    end
-    g = g * diag;
+    
+    % ReLU
+%     v = double(s1>0);
+    % tanh
+    v = 1-(tanh(s1)).^2;
+    
+    temp = diag(v);
+    g = g * temp;
     
     grad_b1 = grad_b1 + g';
     grad_W1 = grad_W1 + g' * x';

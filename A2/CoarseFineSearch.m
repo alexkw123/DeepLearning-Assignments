@@ -1,16 +1,16 @@
 % % ----------- testing -------------
-% % test if the ComputeCost and ComputeGradients functions are right
-% lambda = 0;
-% [P, h, s1] = EvaluateClassifier(X_train(:, 1:5), W, b);
-% % function given by professor
-% [ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda, 1e-6);
-% % implemented function
-% [grad_W, grad_b] = ComputeGradients(X_train(:, 1:5), Y_train(:, 1:5), P, h, s1, W, lambda, K, m);
-% % relative error
-% error_b1 = norm(grad_b{1} - ngrad_b{1})/max(eps,norm(grad_b{1})+norm(ngrad_b{1}));
-% error_b2 = norm(grad_b{2} - ngrad_b{2})/max(eps,norm(grad_b{2})+norm(ngrad_b{2}));
-% error_W1 = norm(grad_W{1} - ngrad_W{1})/max(eps,norm(grad_W{1})+norm(ngrad_W{1}));
-% error_W2 = norm(grad_W{2} - ngrad_W{2})/max(eps,norm(grad_W{2})+norm(ngrad_W{2}));
+% test if the ComputeCost and ComputeGradients functions are right
+lambda = 0;
+[P, h, s1] = EvaluateClassifier(X_train(:, 1:5), W, b);
+% function given by professor
+[ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1), Y_train(:, 1), W, b, lambda, 1e-6);
+% implemented function
+[grad_W, grad_b] = ComputeGradients(X_train(:, 1), Y_train(:, 1), P, h, s1, W, lambda, K, m);
+% relative error
+error_b1 = norm(grad_b{1} - ngrad_b{1})/max(eps,norm(grad_b{1})+norm(ngrad_b{1}));
+error_b2 = norm(grad_b{2} - ngrad_b{2})/max(eps,norm(grad_b{2})+norm(ngrad_b{2}));
+error_W1 = norm(grad_W{1} - ngrad_W{1})/max(eps,norm(grad_W{1})+norm(ngrad_W{1}));
+error_W2 = norm(grad_W{2} - ngrad_W{2})/max(eps,norm(grad_W{2})+norm(ngrad_W{2}));
 
 % ------- training process ---------
 % read in training, validataion and test data
