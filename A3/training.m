@@ -37,21 +37,18 @@ X_test = X_test - repmat(mean_X, [1, size(X_test, 2)]);
 
 % initialize the network
 % rng(3);
-[W, b, K, rho, m] = InitializeParameters(X_train, y_train);
+layers = 3;
+hnodes = [50, 30];
+[W, b, K, rho] = InitializeParameters(X_train, y_train, layers, hnodes);
 
 % set training parameters
-% n_epochs=10; n_batch=250;  % 0.4442   %0.5005
-
-% lambda = 3.24e-05; eta = 0.108993;  % 0.4576
-% lambda = 9.21E-05; eta = 0.135561;  % 0.4351
-
-% n_epochs = 10; n_batch = 100; lambda = 2.24e-05; eta = 0.108993;
-% n_epochs = 10; n_batch = 100; lambda = 1.24e-05; eta = 0.118811;
 % n_epochs = 10; n_batch = 100; lambda = 3.91e-05; eta = 0.119100;
-n_epochs = 10; n_batch = 100; lambda = 3.91e-05; eta = 0.119100;
+% n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.002; % 3layer_1  0.1000  0.1823
+% n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.2;   % 3layer_2  0.1948  (0.3228  0.2784 0.3103)
+n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.4;   % 3layer_3  0.2478  (0.2977 0.3007)
 
 % training
-[W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, m, rho);
+[W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, rho);
 
 % calculate the accuracy
 % [X, ~, y] = LoadBatch('test_batch.mat'); % 1

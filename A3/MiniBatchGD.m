@@ -1,7 +1,6 @@
-function [W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, m, rho)
-[d, N] = size(X_train);
-[K, ~] = size(Y_train);
+function [W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, rho)
 
+[~, N] = size(X_train);
 % train and validation argument
 cost_train = zeros(n_epochs, 1);
 cost_val = zeros(n_epochs, 1);
@@ -16,31 +15,31 @@ original_training_cost = ComputeCost(X_train, Y_train, W, b, lambda);
 % training
 for i = 1 : n_epochs
     % initialize momentum
-    v_W1 = zeros(m, d);
-    v_b1 = zeros(m, 1);
-    v_W2 = zeros(K, m);
-    v_b2 = zeros(K, 1);
+    layers = length(W);
+    v_W = cell(layers);
+    v_b = cell(layers);
+    for l = 1 : layers
+        v_W{l} = zeros(size(W{l}));
+        v_b{l} = zeros(size(b{l}));
+    end
     
     for j = 1 : N/n_batch
-    j_start = (j-1) * n_batch + 1;
-    j_end = j * n_batch;
-    inds = j_start : j_end;
-    Xbatch = X_train(:, inds);
-    Ybatch = Y_train(:, inds);
-    % compute gradient
-    [P, h, s1] = EvaluateClassifier(Xbatch, W, b);
-    [K, ~] = size(Ybatch);
-    [grad_W, grad_b] = ComputeGradients(Xbatch, Ybatch, P, h, s1, W, lambda, K, m);
-    % momentum
-    v_W1 = rho * v_W1 + eta * grad_W{1};
-    v_b1 = rho * v_b1 + eta * grad_b{1};
-    v_W2 = rho * v_W2 + eta * grad_W{2};
-    v_b2 = rho * v_b2 + eta * grad_b{2};
-    % update the weights and the bias.
-    W{1} = W{1} - v_W1;
-    b{1} = b{1} - v_b1;
-    W{2} = W{2} - v_W2;
-    b{2} = b{2} - v_b2;
+        j_start = (j-1) * n_batch + 1;
+        j_end = j * n_batch;
+        inds = j_start : j_end;
+        Xbatch = X_train(:, inds);
+        Ybatch = Y_train(:, inds);
+        % compute gradient
+        [P, s, h] = EvaluateClassifier(Xbatch, W, b);
+        [grad_W, grad_b] = ComputeGradients(Xbatch, Ybatch, P, s, h, W, lambda, b);
+        % momentum
+        for l = 1 : layers
+            v_W{l} = rho * v_W{l} + eta * grad_W{l};
+            v_b{l} = rho * v_b{l} + eta * grad_b{l};
+            % update the weights and the bias.
+            W{l} = W{l} - v_W{l};
+            b{l} = b{l} - v_b{l};
+        end
     end
     
     cost_train(i) = ComputeCost(X_train, Y_train, W, b, lambda);
@@ -61,5 +60,5 @@ for i = 1 : n_epochs
 %     if mod(i, 10) == 0
 %         eta = 0.1 * eta;
 %     end
-    eta = 0.8 * eta;
+    eta = 0.9 * eta;
 end

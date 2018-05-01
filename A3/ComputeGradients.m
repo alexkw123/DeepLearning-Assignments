@@ -19,12 +19,6 @@ for i = 1:n
     g = -(y-p)';
     
     for j = k:-1:2
-        disp(j);
-%         disp(size(W{j}));
-%         disp(size(g' * h'));
-        disp(size(grad_b{j}));
-        disp(size(g'));
-        
         grad_b{j} = grad_b{j} + g';
         h = H{j-1}(:, i);
         
