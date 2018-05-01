@@ -1,5 +1,5 @@
-function [W, b, K, rho, m] = InitializeParameters(X_train, y_train, layers)
-m = 100;
+function [W, b, K, rho] = InitializeParameters(X_train, y_train, layers, hnodes)
+% m = 50;
 rho = 0.9;
 % initialize parameters
 [d, ~] = size(X_train);
@@ -12,17 +12,17 @@ stanDev = 0.01;
 % W2 = sqrt(2/m)*randn(K,m);
 
 % init W and b for each layer
-W1 = stanDev*randn(m,d);
-b1 = zeros(m,1);
+W1 = stanDev*randn(hnodes(1),d);
+b1 = zeros(hnodes(1),1);
 W = {W1};
 b = {b1};
 for i = 2:(layers-1)
-    Wi = stanDev*randn(m,m);
+    Wi = stanDev*randn(hnodes(i),hnodes(i-1));
     W = [W; {Wi}];
-    bi = stanDev*randn(m,1);
+    bi = stanDev*randn(hnodes(i),1);
     b = [b; {bi}];
 end
-Wend = stanDev*randn(K,m);
+Wend = stanDev*randn(K,hnodes(end));
 bend = zeros(K,1);
 W = [W; {Wend}];
 b = [b; {bend}];
