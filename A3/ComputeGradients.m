@@ -15,7 +15,6 @@ for i = 1:n
     y = Y(:, i);
     p = P(:, i);
     
-    
     g = -(y-p)';
     
     for j = k:-1:2

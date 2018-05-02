@@ -4,7 +4,7 @@ lambda = 0;
 layers = 3;
 hnodes = [50, 30];
 [W, b, K, rho] = InitializeParameters(X_train, y_train, layers, hnodes);
-[P, s, h] = EvaluateClassifier(X_train(:, 1), W, b);
+[P, s, h] = EvaluateClassifier(X_train(:, 1:2), W, b);
 % function given by professor
 [ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1), Y_train(:, 1), W, b, lambda, 1e-6);
 % implemented function
