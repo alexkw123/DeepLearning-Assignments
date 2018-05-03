@@ -6,10 +6,10 @@ rho = 0.9;
 K = length(min(y_train):max(y_train));
 
 % random init W and b for each layer
-rng(1);
+% rng(1);
 stanDev = 0.01;
-W = cell(layers);
-b = cell(layers);
+W = cell(layers,1);
+b = cell(layers,1);
 W{1} = stanDev*randn(hnodes(1),d);
 b{1} = zeros(hnodes(1),1);
 for i = 2:(layers-1)
@@ -20,8 +20,8 @@ W{layers} = stanDev*randn(K,hnodes(end));
 b{layers} = zeros(K,1);
 
 % He initialization
-% W = cell(layers);
-% b = cell(layers);
+% W = cell(layers,1);
+% b = cell(layers,1);
 % W{1} = sqrt(2/d)*randn(hnodes(1),d);
 % b{1} = zeros(hnodes(1),1);
 % for i = 2:(layers-1)

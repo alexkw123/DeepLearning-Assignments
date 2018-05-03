@@ -1,16 +1,16 @@
 % % ----------- testing -------------
 % test if the ComputeCost and ComputeGradients functions are right
 lambda = 0;
-layers = 3;
-hnodes = [50, 30];
-[W, b, K, rho] = InitializeParameters(X_train, y_train, layers, hnodes);
-[P, s, h] = EvaluateClassifier(X_train(:, 1:2), W, b);
+k = 2;  % layers
+hnodes = [50];
+
+[W, b, K, rho] = InitializeParameters(X_train, y_train, k, hnodes);
 % function given by professor
-[ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1), Y_train(:, 1), W, b, lambda, 1e-6);
+[ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda, 1e-6);
 % implemented function
-[grad_W, grad_b] = ComputeGradients(X_train(:, 1), Y_train(:, 1), P, s, h, W, lambda, b);
+[P, s, sp, h, mu, v] = EvaluateClassifier(X_train(:, 1:5), W, b);
+[grad_W, grad_b] = ComputeGradients(X_train(:, 1:5), Y_train(:, 1:5), P, s, h, W, lambda, b, sp, mu, v);
 % relative error
-k = length(grad_W);
 error_b = zeros(k,1);
 error_W = zeros(k,1);
 for i = 1:k

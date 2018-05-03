@@ -3,7 +3,7 @@ function J = ComputeCost(X, Y, W, b, lambda)
 % X: an image (dxn)
 % Y: one-hot label for the column (Kxn)
 [~, n] = size(X);
-P = EvaluateClassifier(X, W, b);
+[P, ~, ~, ~, ~, ~] = EvaluateClassifier(X, W, b);
 temp = 0;
 for i = 1:length(W)
     temp = temp + sum(sum((W{i}.^2),1));
