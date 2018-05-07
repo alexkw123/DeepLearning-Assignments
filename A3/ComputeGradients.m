@@ -43,8 +43,10 @@ for j = (k-1):-1:1
     grad_W{j} = grad_W{j}/n + 2 * lambda * W{j};
     
     if j > 1
-        g = g * W{j};
-        g = g * diag(double(Sp{j-1}(:, i)>0));
+        for i = 1:n
+            g{i} = g{i} * W{j};
+            g{i} = g{i} * diag(double(Sp{j-1}(:, i)>0));
+        end
     end
 end
 
