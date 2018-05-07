@@ -16,12 +16,12 @@ v = cell(k-1, 1);
 for i = 1:(k-1)
     s{i} = bsxfun(@plus, W{i} * x, b{i});
     % batch normalize
-    mu{i} = sum(s{i}, 2)/n;
-    v{i} = var(s{i}, 0, 2)*(n-1)/n;
-    sp{i} = diag(v{i}.^(-0.5))*(s{i}-mu{i});
+%     mu{i} = sum(s{i}, 2)/n;
+%     v{i} = var(s{i}, 0, 2)*(n-1)/n;
+%     sp{i} = diag(v{i}.^(-0.5))*(s{i}-mu{i});
     % ReLU
+    x = bsxfun(@max, 0, s{i});
     h{i} = x;
-    x = bsxfun(@max, 0, sp{i});
     % tanh
     % h = arrayfun(@(x) tanh(x),s{i});
 end

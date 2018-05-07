@@ -5,6 +5,7 @@ function J = ComputeCost(X, Y, W, b, lambda)
 [~, n] = size(X);
 [P, ~, ~, ~, ~, ~] = EvaluateClassifier(X, W, b);
 temp = 0;
+% disp(length(W));
 for i = 1:length(W)
     temp = temp + sum(sum((W{i}.^2),1));
 end
