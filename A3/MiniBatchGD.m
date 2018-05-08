@@ -1,11 +1,10 @@
-function [W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, rho)
+function [W, b, cost_train, cost_val, ma] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, rho)
 
 [~, N] = size(X_train);
 % train and validation argument
 cost_train = zeros(n_epochs, 1);
 cost_val = zeros(n_epochs, 1);
-
-original_training_cost = ComputeCost(X_train, Y_train, W, b, lambda);
+alpha = 0.99;
 
 % keep a record of the best model
 % best_W = W;
@@ -29,9 +28,19 @@ for i = 1 : n_epochs
         inds = j_start : j_end;
         Xbatch = X_train(:, inds);
         Ybatch = Y_train(:, inds);
+        [P, s, sp, h, mu, v] = EvaluateClassifier(Xbatch, W, b);
         % compute gradient
-        [P, s, h] = EvaluateClassifier(Xbatch, W, b);
-        [grad_W, grad_b] = ComputeGradients(Xbatch, Ybatch, P, s, h, W, lambda, b);
+        disp(mu);
+        if j==1
+            ma.mu = mu;
+            ma.v = v;
+        else
+            for e = 1:length(mu)
+                ma.mu{e} = alpha*ma.mu{e} + (1-alpha)*mu{e};
+                ma.v{e} = alpha*ma.v{e} + (1-alpha)*v{e};
+            end
+        end
+        [grad_W, grad_b] = ComputeGradients(Xbatch, Ybatch, P, s, h, W, lambda, b, sp, mu, v);
         % momentum
         for l = 1 : layers
             v_W{l} = rho * v_W{l} + eta * grad_W{l};
@@ -42,12 +51,8 @@ for i = 1 : n_epochs
         end
     end
     
-    cost_train(i) = ComputeCost(X_train, Y_train, W, b, lambda);
-    cost_val(i) = ComputeCost(X_val, Y_val, W, b, lambda);
-    % abort when training cost is too large
-    if cost_train(i) > 3 * original_training_cost
-        break;
-    end
+    cost_train(i) = ComputeCost(X_train, Y_train, W, b, lambda, ma);
+    cost_val(i) = ComputeCost(X_val, Y_val, W, b, lambda, ma);
     
     % record best model
 %     if cost_val(i) < best_val_cost

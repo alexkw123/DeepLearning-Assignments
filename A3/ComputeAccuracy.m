@@ -1,7 +1,7 @@
-function acc = ComputeAccuracy(X, y, W, b)
+function acc = ComputeAccuracy(X, y, W, b, ma)
 
 [~, n] = size(X);
-P = EvaluateClassifier(X, W, b);
+[P, ~, ~, ~, ~, ~] = EvaluateClassifier(X, W, b, ma);
 % disp(P);
 
 [~, k] = max(P);

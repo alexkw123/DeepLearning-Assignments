@@ -1,9 +1,14 @@
-function J = ComputeCost(X, Y, W, b, lambda)
+function J = ComputeCost(X, Y, W, b, lambda, varargin)
 % equation 5:
 % X: an image (dxn)
 % Y: one-hot label for the column (Kxn)
 [~, n] = size(X);
-[P, ~, ~, ~, ~, ~] = EvaluateClassifier(X, W, b);
+flag = isempty(varargin);
+if flag
+    [P, ~, ~, ~, ~, ~] = EvaluateClassifier(X, W, b);
+else
+    [P, ~, ~, ~, ~, ~] = EvaluateClassifier(X, W, b, varargin);
+end
 temp = 0;
 % disp(length(W));
 for i = 1:length(W)

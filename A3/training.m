@@ -44,16 +44,16 @@ hnodes = [50, 30];
 % set training parameters
 % n_epochs = 10; n_batch = 100; lambda = 3.91e-05; eta = 0.119100;
 % n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.002; % 3layer_1  0.1000  0.1823
-% n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.2;   % 3layer_2  0.1948  (0.3228  0.2784 0.3103)
-n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.4;   % 3layer_3  0.2478  (0.2977 0.3007)
+n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.2;   % 3layer_2  0.1948  (0.3228  0.2784 0.3103)
+% n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.4;   % 3layer_3  0.2478  (0.2977 0.3007)
 
 % training
-[W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, rho);
+[W, b, cost_train, cost_val, ma] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, rho);
 
 % calculate the accuracy
 % [X, ~, y] = LoadBatch('test_batch.mat'); % 1
 
-acc = ComputeAccuracy(X_test, y_test, W, b);
+acc = ComputeAccuracy(X_test, y_test, W, b, ma);
 disp(acc);
 
 % acc = ComputeAccuracy(X_train, y_train, W, b);

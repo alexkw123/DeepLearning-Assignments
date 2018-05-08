@@ -1,4 +1,4 @@
-function [P, s, sp, h, mu, v] = EvaluateClassifier(X, W, b)
+function [P, s, sp, h, mu, v] = EvaluateClassifier(X, W, b, varargin)
 % X: dxN
 % W: Kxd
 % b: Kx1
@@ -6,22 +6,31 @@ function [P, s, sp, h, mu, v] = EvaluateClassifier(X, W, b)
 x = X;
 [~, n] = size(x);
 k = length(W);  % number of layers
-h = cell(k,1);
+h = cell(k-1,1);
 s = cell(k,1);
 sp = cell(k-1,1);
 
-mu = cell(k-1, 1);
-v = cell(k-1, 1);
+flag = isempty(varargin); % moving average
+if flag
+  mu = cell(k-1, 1);
+  v = cell(k-1, 1);
+else
+  mu = varargin{1}.mu;
+  v = varargin{1}.v;
+end
 
 for i = 1:(k-1)
     s{i} = bsxfun(@plus, W{i} * x, b{i});
     % batch normalize
-%     mu{i} = sum(s{i}, 2)/n;
-%     v{i} = var(s{i}, 0, 2)*(n-1)/n;
-%     sp{i} = diag(v{i}.^(-0.5))*(s{i}-mu{i});
+    if flag
+        mu{i} = sum(s{i}, 2)/n;
+        v{i} = var(s{i}, 0, 2)*(n-1)/n;
+    end
+    sp{i} = diag(v{i}.^(-0.5))*bsxfun(@minus, s{i}, mu{i});
     % ReLU
-    x = bsxfun(@max, 0, s{i});
     h{i} = x;
+%     x = bsxfun(@max, 0, s{i});
+    x = bsxfun(@max, 0, sp{i});
     % tanh
     % h = arrayfun(@(x) tanh(x),s{i});
 end

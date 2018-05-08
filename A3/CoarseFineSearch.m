@@ -1,11 +1,12 @@
 % % ----------- testing -------------
 % test if the ComputeCost and ComputeGradients functions are right
 lambda = 0;
-k = 3;  % layers
-hnodes = [50,30];
+k = 2;  % layers
+hnodes = [50];
 
 [W, b, K, rho] = InitializeParameters(X_train, y_train, k, hnodes);
 cost = ComputeCost(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda);
+
 % function given by professor
 [ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda, 1e-6);
 % implemented function
