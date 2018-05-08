@@ -3,6 +3,7 @@ function J = ComputeCost(X, Y, W, b, lambda, varargin)
 % X: an image (dxn)
 % Y: one-hot label for the column (Kxn)
 [~, n] = size(X);
+% [P, ~, ~, ~, ~, ~] = EvaluateClassifier(X, W, b, varargin);
 flag = isempty(varargin);
 if flag
     [P, ~, ~, ~, ~, ~] = EvaluateClassifier(X, W, b);

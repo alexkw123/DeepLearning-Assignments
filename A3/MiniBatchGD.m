@@ -30,7 +30,6 @@ for i = 1 : n_epochs
         Ybatch = Y_train(:, inds);
         [P, s, sp, h, mu, v] = EvaluateClassifier(Xbatch, W, b);
         % compute gradient
-        disp(mu);
         if j==1
             ma.mu = mu;
             ma.v = v;
@@ -50,9 +49,8 @@ for i = 1 : n_epochs
             b{l} = b{l} - v_b{l};
         end
     end
-    
-    cost_train(i) = ComputeCost(X_train, Y_train, W, b, lambda, ma);
-    cost_val(i) = ComputeCost(X_val, Y_val, W, b, lambda, ma);
+    cost_train(i) = ComputeCost(X_train, Y_train, W, b, lambda);
+    cost_val(i) = ComputeCost(X_val, Y_val, W, b, lambda);
     
     % record best model
 %     if cost_val(i) < best_val_cost
