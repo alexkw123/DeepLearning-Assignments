@@ -5,19 +5,20 @@ k = 2;  % layers
 hnodes = [50];
 
 [W, b, K, rho] = InitializeParameters(X_train, y_train, k, hnodes);
-cost = ComputeCost(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda);
+% cost = ComputeCost(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda);
 
 % function given by professor
 [ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda, 1e-6);
+[ngrad_b1, ngrad_W1] = ComputeGradsNum(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda, 1e-6,ma);
 % implemented function
-[P, s, sp, h, mu, v] = EvaluateClassifier(X_train(:, 1:5), W, b);
-[grad_W, grad_b] = ComputeGradients(X_train(:, 1:5), Y_train(:, 1:5), P, s, h, W, lambda, b, sp, mu, v);
+[P, s, sp, h, ma.mu, ma.v] = EvaluateClassifier(X_train(:, 1:5), W, b);
+[grad_W, grad_b] = ComputeGradients(X_train(:, 1:5), Y_train(:, 1:5), P, s, h, W, lambda, b, sp, ma.mu, ma.v);
 % relative error
 error_b = zeros(k,1);
 error_W = zeros(k,1);
 for i = 1:k
-    error_b(i) = norm(grad_b{i} - ngrad_b{i})/max(eps,norm(grad_b{i})+norm(ngrad_b{i}));
-    error_W(i) = norm(grad_W{i} - ngrad_W{i})/max(eps,norm(grad_W{i})+norm(ngrad_W{i}));
+    error_b(i) = norm(grad_b{i} - ngrad_b1{i})/max(eps,norm(grad_b{i})+norm(ngrad_b1{i}));
+    error_W(i) = norm(grad_W{i} - ngrad_W1{i})/max(eps,norm(grad_W{i})+norm(ngrad_W1{i}));
 end
 
 % ------- training process ---------
@@ -27,11 +28,11 @@ end
 [X_test, Y_test, y_test] = LoadBatch('test_batch.mat');
 
 % transform training data to have zero mean
-mean_X = mean(X_train, 2);
-X_train = X_train - repmat(mean_X, [1, size(X_train, 2)]);
-% subtract it from the input vectors in the validation and test sets
-X_val = X_val - repmat(mean_X, [1, size(X_val, 2)]);
-X_test = X_test - repmat(mean_X, [1, size(X_test, 2)]);
+% mean_X = mean(X_train, 2);
+% X_train = X_train - repmat(mean_X, [1, size(X_train, 2)]);
+% % subtract it from the input vectors in the validation and test sets
+% X_val = X_val - repmat(mean_X, [1, size(X_val, 2)]);
+% X_test = X_test - repmat(mean_X, [1, size(X_test, 2)]);
 
 % only use 100 examples
 X_train = X_train(:,1:1000);

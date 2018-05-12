@@ -68,6 +68,7 @@ for j = (k-1):-1:1
     g = BatchNormBackPass(g, S{j}, mu{j}, v{j}, eps);
     
     for i = 1:n
+        disp(grad_b{j});
         grad_b{j} = grad_b{j} + g{i}';
         grad_W{j} = grad_W{j} + g{i}' * H{j}(:, i)';
     end
