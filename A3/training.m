@@ -1,4 +1,4 @@
-% ------- training process ---------
+% ------- training.m ---------
 % read in training, validataion and test data
 [X_train, Y_train, y_train] = LoadBatch('data_batch_1.mat');
 [X_val, Y_val, y_val] = LoadBatch('data_batch_2.mat');

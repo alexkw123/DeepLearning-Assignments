@@ -1,3 +1,5 @@
+% ------- ComputeAccuracy.m ---------
+
 function acc = ComputeAccuracy(X, y, W, b, ma)
 
 [~, n] = size(X);

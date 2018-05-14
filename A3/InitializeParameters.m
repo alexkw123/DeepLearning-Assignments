@@ -1,3 +1,5 @@
+% ------- InitializeParameters.m ---------
+
 function [W, b, K, rho] = InitializeParameters(X_train, y_train, layers, hnodes)
 % m = 50;
 rho = 0.9;

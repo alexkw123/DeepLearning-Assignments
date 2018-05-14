@@ -1,7 +1,9 @@
-function g = BatchNormBackPass(g, s, mu, v, eps)
+% ------- BatchNormBackPass.m ---------
+
+function g = BatchNormBackPass(g, s, mu, v)
 % s, mu, v: cell array
 n = length(g); % number of batches
-v = v;
+v = v+eps;
 dv = zeros(size(g{1}));
 dmu = zeros(size(g{1}));
 for i=1:n

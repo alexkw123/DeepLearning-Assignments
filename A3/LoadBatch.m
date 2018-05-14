@@ -1,3 +1,5 @@
+% ------- LoadBatch.m ---------
+
 function [X, Y, y] = LoadBatch(filename)
 % the function to read in the data from the file and return the image and
 % label data in seperate files

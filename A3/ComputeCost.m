@@ -1,3 +1,5 @@
+% ------- ComputeCost.m ---------
+
 function J = ComputeCost(X, Y, W, b, lambda, varargin)
 % equation 5:
 % X: an image (dxn)

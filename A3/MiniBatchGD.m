@@ -1,3 +1,5 @@
+% ------- MiniBatchGD.m ---------
+
 function [W, b, cost_train, cost_val, ma] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, rho)
 
 [~, N] = size(X_train);

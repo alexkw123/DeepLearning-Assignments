@@ -1,3 +1,5 @@
+% ------- EvaluateClassifier.m ---------
+
 function [P, s, sp, h, mu, v] = EvaluateClassifier(X, W, b, varargin)
 % X: dxN
 % W: Kxd
@@ -26,9 +28,8 @@ for i = 1:(k-1)
         mu{i} = mean(s{i}, 2);
         v{i} = var(s{i}, 0, 2)*(n-1)/n;
     end
-    sp{i} = diag(v{i}.^(-0.5))*bsxfun(@minus, s{i}, mu{i});
+    sp{i} = diag((v{i}+eps).^(-0.5))*bsxfun(@minus, s{i}, mu{i});
     % ReLU
-%     x = bsxfun(@max, 0, s{i});
     x = bsxfun(@max, 0, sp{i});
     h{i} = x;
     % tanh
