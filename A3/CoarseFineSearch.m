@@ -9,16 +9,14 @@ hnodes = [50];
 
 % function given by professor
 [ngrad_b, ngrad_W] = ComputeGradsNum(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda, 1e-6);
-[ngrad_b1, ngrad_W1] = ComputeGradsNum(X_train(:, 1:5), Y_train(:, 1:5), W, b, lambda, 1e-6,ma);
 % implemented function
-[P, s, sp, h, ma.mu, ma.v] = EvaluateClassifier(X_train(:, 1:5), W, b);
-[grad_W, grad_b] = ComputeGradients(X_train(:, 1:5), Y_train(:, 1:5), P, s, h, W, lambda, b, sp, ma.mu, ma.v);
+[grad_W, grad_b] = ComputeGradients(X_train(:, 1:5), Y_train(:, 1:5), W, lambda, b);
 % relative error
 error_b = zeros(k,1);
 error_W = zeros(k,1);
 for i = 1:k
-    error_b(i) = norm(grad_b{i} - ngrad_b1{i})/max(eps,norm(grad_b{i})+norm(ngrad_b1{i}));
-    error_W(i) = norm(grad_W{i} - ngrad_W1{i})/max(eps,norm(grad_W{i})+norm(ngrad_W1{i}));
+    error_b(i) = norm(grad_b{i} - ngrad_b{i})/max(eps,norm(grad_b{i})+norm(ngrad_b{i}));
+    error_W(i) = norm(grad_W{i} - ngrad_W{i})/max(eps,norm(grad_W{i})+norm(ngrad_W{i}));
 end
 
 % ------- training process ---------

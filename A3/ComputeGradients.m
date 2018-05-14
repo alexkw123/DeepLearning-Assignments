@@ -1,4 +1,6 @@
-function [grad_W, grad_b] = ComputeGradients(X, Y, P, S, H, W, lambda, b, Sp, mu, v)
+function [grad_W, grad_b] = ComputeGradients(X, Y, W, lambda, b)
+
+[P, S, Sp, H, mu, v] = EvaluateClassifier(X, W, b);
 
 [~, n] = size(X);
 k = length(W);
@@ -44,43 +46,50 @@ end
 % end
 
 % batch, the last layer
-g = cell(n,1);
-for i = 1:n
-    y = Y(:, i);
-    p = P(:, i);
-    
-    g{i} = -(y-p)';
-    grad_b{k} = grad_b{k} + g{i}';
-    grad_W{k} = grad_W{k} + g{i}' * H{k}(:, i)';
-end
-
-grad_b{k} = grad_b{k}/n;
-grad_W{k} = grad_W{k}/n + 2 * lambda * W{k};
+% g = cell(n,1);
+% for i = 1:n
+%     y = Y(:, i);
+%     p = P(:, i);
+%     
+%     g{i} = -(y-p)';
+%     grad_b{k} = grad_b{k} + g{i}';
+%     grad_W{k} = grad_W{k} + g{i}' * H{k}(:, i)';
+% end
+% 
+% grad_b{k} = grad_b{k}/n;
+% grad_W{k} = grad_W{k}/n + 2 * lambda * W{k};
 
 % Propagate the gradient vector g to the previous layer
-for i = 1:n
-    g{i} = g{i} * W{k};
-    g{i} = g{i} * diag(double(Sp{k-1}(:, i)>0));
-end
 
+g = cell(n,1);
 % the other layers
-for j = (k-1):-1:1
-    g = BatchNormBackPass(g, S{j}, mu{j}, v{j}, eps);
+for j = k:(-1):1
+    if j == k
+        for i = 1:n
+            g{i} = -(Y(:, i)-P(:, i))';
+        end
+    end
+    
+    if j == 1
+        x = X;
+    else
+        x = H{j-1};
+    end
     
     for i = 1:n
-        disp(grad_b{j});
         grad_b{j} = grad_b{j} + g{i}';
-        grad_W{j} = grad_W{j} + g{i}' * H{j}(:, i)';
-    end
-    grad_b{j} = grad_b{j}/n;
-    grad_W{j} = grad_W{j}/n + 2 * lambda * W{j};
-    
-    if j > 1
-        for i = 1:n
+        grad_W{j} = grad_W{j} + g{i}' * x(:, i)';
+        
+        if j ~= 1
             g{i} = g{i} * W{j};
             g{i} = g{i} * diag(double(Sp{j-1}(:, i)>0));
         end
     end
+    if j ~= 1
+        g = BatchNormBackPass(g, S{j-1}, mu{j-1}, v{j-1}, eps);
+    end
+    grad_b{j} = grad_b{j}/n;
+    grad_W{j} = grad_W{j}/n + 2 * lambda * W{j};
 end
 
 end
