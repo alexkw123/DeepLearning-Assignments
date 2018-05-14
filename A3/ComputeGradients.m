@@ -1,8 +1,22 @@
 % ------- ComputeGradients.m ---------
 
-function [grad_W, grad_b] = ComputeGradients(X, Y, W, lambda, b)
+function [grad_W, grad_b, ma] = ComputeGradients(X, Y, W, lambda, b, varargin)
 
 [P, S, Sp, H, mu, v] = EvaluateClassifier(X, W, b);
+
+alpha = 0.99;
+% exponential moving average
+if isempty(varargin)
+    ma.mu = mu;
+    ma.v = v;
+else
+    ma.mu = varargin{1}.mu;
+    ma.v = varargin{1}.v;
+    for e = 1:length(mu)
+        ma.mu{e} = alpha*ma.mu{e} + (1-alpha)*mu{e};
+        ma.v{e} = alpha*ma.v{e} + (1-alpha)*v{e};
+    end
+end
 
 [~, n] = size(X);
 k = length(W);

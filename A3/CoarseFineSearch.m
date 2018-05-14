@@ -25,9 +25,14 @@ n_epochs=10; n_batch=100;
 
 times = 50;
 result = zeros(4, times);
-% lmin = -6; lmax = -1; emin = log10(0.003); emax = log10(0.5); % coarse
-lmin = log10(4e-6); lmax = log10(4e-1); emin = log10(0.1); emax = log10(0.25); % fine
+% lmin = -6; lmax = -1; emin = log10(0.003); emax = log10(0.04); % coarse
+lmin = log10(4e-6); lmax = log10(4e-1); emin = log10(0.001); emax = log10(0.003); % fine
 % lambda = 0.9; eta = 0.01;
+
+% initialize
+k = 3;  % layers
+hnodes = [50,30];
+[W, b, K, rho] = InitializeParameters(X_train, y_train, k, hnodes);
 
 for i = 1:times
     l = lmin + (lmax - lmin)*rand(1, 1);
@@ -35,12 +40,10 @@ for i = 1:times
     
     e = emin + (emax - emin)*rand(1, 1);
     eta = 10^e;
-%     eta = e;
-    % training
-    [W, b, K, rho, m] = InitializeParameters(X_train, y_train);
-    [W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, m, rho);
     
-    acc_on_val = ComputeAccuracy(X_val, y_val, W, b);
+    [W, b, cost_train, cost_val, ma] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, rho);
+    
+    acc_on_val = ComputeAccuracy(X_val, y_val, W, b, ma);
     
     best_on_val = min(cost_val);
     result(1, i) = lambda;

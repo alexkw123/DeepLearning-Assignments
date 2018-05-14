@@ -24,16 +24,16 @@
 % Y_train(:, split:N) = [];
 % y_train(split:N) = [];
 
-X_train = X_train(:,1:1000);
-Y_train = Y_train(:,1:1000);
-y_train = y_train(1:1000);
+% X_train = X_train(:,1:1000);
+% Y_train = Y_train(:,1:1000);
+% y_train = y_train(1:1000);
 
 % transform training data to have zero mean
-mean_X = mean(X_train, 2);
-X_train = X_train - repmat(mean_X, [1, size(X_train, 2)]);
-% subtract it from the input vectors in the validation and test sets
-X_val = X_val - repmat(mean_X, [1, size(X_val, 2)]);
-X_test = X_test - repmat(mean_X, [1, size(X_test, 2)]);
+% mean_X = mean(X_train, 2);
+% X_train = X_train - repmat(mean_X, [1, size(X_train, 2)]);
+% % subtract it from the input vectors in the validation and test sets
+% X_val = X_val - repmat(mean_X, [1, size(X_val, 2)]);
+% X_test = X_test - repmat(mean_X, [1, size(X_test, 2)]);
 
 % initialize the network
 % rng(3);
@@ -48,7 +48,12 @@ X_test = X_test - repmat(mean_X, [1, size(X_test, 2)]);
 % n_epochs = 10; n_batch = 100; lambda = 2.24e-05; eta = 0.108993;
 % n_epochs = 10; n_batch = 100; lambda = 1.24e-05; eta = 0.118811;
 % n_epochs = 10; n_batch = 100; lambda = 3.91e-05; eta = 0.119100;
-n_epochs = 10; n_batch = 100; lambda = 3.91e-05; eta = 0.119100;
+% n_epochs = 10; n_batch = 100; lambda = 3.91e-05; eta = 0.119100;
+
+%  for lab 3 final part
+% n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.002; % 2layer_1  0.2715
+% n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.02;  % 2layer_2  0.4072
+n_epochs = 10; n_batch = 100; lambda = 0; eta = 0.4;   % 2layer_3  0.1718
 
 % training
 [W, b, cost_train, cost_val] = MiniBatchGD(X_train, Y_train, X_val, Y_val, W, b, lambda, n_epochs, n_batch, eta, m, rho);

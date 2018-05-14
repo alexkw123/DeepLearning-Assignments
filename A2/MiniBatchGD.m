@@ -46,9 +46,9 @@ for i = 1 : n_epochs
     cost_train(i) = ComputeCost(X_train, Y_train, W, b, lambda);
     cost_val(i) = ComputeCost(X_val, Y_val, W, b, lambda);
     % abort when training cost is too large
-    if cost_train(i) > 3 * original_training_cost
-        break;
-    end
+%     if cost_train(i) > 3 * original_training_cost
+%         break;
+%     end
     
     % record best model
 %     if cost_val(i) < best_val_cost

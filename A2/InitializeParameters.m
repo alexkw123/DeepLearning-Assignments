@@ -1,5 +1,5 @@
 function [W, b, K, rho, m] = InitializeParameters(X_train, y_train)
-m = 100;
+m = 50;
 rho = 0.9;
 % initialize parameters
 [d, ~] = size(X_train);

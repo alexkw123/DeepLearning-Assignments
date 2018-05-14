@@ -8,7 +8,7 @@ rho = 0.9;
 K = length(min(y_train):max(y_train));
 
 % random init W and b for each layer
-rng(1);
+% rng(1);
 stanDev = 0.01;
 W = cell(layers,1);
 b = cell(layers,1);

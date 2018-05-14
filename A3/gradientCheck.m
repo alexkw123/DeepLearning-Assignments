@@ -17,8 +17,8 @@ hnodes = [50,30];
 error_b = zeros(k,1);
 error_W = zeros(k,1);
 for i = 1:k
-    error_b(i) = norm(grad_b{i} - ngrad_b{i})/max(eps,norm(grad_b{i})+norm(ngrad_b{i}));
-    error_W(i) = norm(grad_W{i} - ngrad_W{i})/max(eps,norm(grad_W{i})+norm(ngrad_W{i}));
+    error_b(i) = norm(grad_b{i} - ngrad_b{i})/max(norm(grad_b{i}),norm(ngrad_b{i}));
+    error_W(i) = norm(grad_W{i} - ngrad_W{i})/max(norm(grad_W{i}),norm(ngrad_W{i}));
 end
 disp(error_W);
 disp(error_b);

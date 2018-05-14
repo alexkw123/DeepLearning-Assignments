@@ -6,7 +6,6 @@ function [W, b, cost_train, cost_val, ma] = MiniBatchGD(X_train, Y_train, X_val,
 % train and validation argument
 cost_train = zeros(n_epochs, 1);
 cost_val = zeros(n_epochs, 1);
-alpha = 0.99;
 
 % keep a record of the best model
 % best_W = W;
@@ -30,18 +29,12 @@ for i = 1 : n_epochs
         inds = j_start : j_end;
         Xbatch = X_train(:, inds);
         Ybatch = Y_train(:, inds);
-        [P, s, sp, h, mu, v] = EvaluateClassifier(Xbatch, W, b);
         % compute gradient
-        if j==1
-            ma.mu = mu;
-            ma.v = v;
+        if j == 1
+            [grad_W, grad_b, ma] = ComputeGradients(Xbatch, Ybatch, W, lambda, b);
         else
-            for e = 1:length(mu)
-                ma.mu{e} = alpha*ma.mu{e} + (1-alpha)*mu{e};
-                ma.v{e} = alpha*ma.v{e} + (1-alpha)*v{e};
-            end
+            [grad_W, grad_b, ma] = ComputeGradients(Xbatch, Ybatch, W, lambda, b, ma);
         end
-        [grad_W, grad_b] = ComputeGradients(Xbatch, Ybatch, P, s, h, W, lambda, b, sp, mu, v);
         % momentum
         for l = 1 : layers
             v_W{l} = rho * v_W{l} + eta * grad_W{l};
@@ -65,5 +58,5 @@ for i = 1 : n_epochs
 %     if mod(i, 10) == 0
 %         eta = 0.1 * eta;
 %     end
-    eta = 0.9 * eta;
+    eta = 0.8 * eta;
 end
