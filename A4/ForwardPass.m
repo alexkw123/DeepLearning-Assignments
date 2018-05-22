@@ -1,4 +1,4 @@
-function [P, H] = ForwardPass(RNN, h0, X)
+function [P, H, loss] = ForwardPass(RNN, h0, X, Y)
 % h0: the hidden state at time 0
 % x0: the first (dummy) input vector to RNN (it can be some character like afull-stop)
 % n: the length of the sequence to generate
@@ -20,4 +20,6 @@ for t = 1:n
     P(:, t) = p;
     H(:, t) = h;
 end
+
+loss = -sum(log(sum(Y.*P, 1)));
 end
