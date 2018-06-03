@@ -46,4 +46,4 @@ end
 % end
 
 epoches = 7;
-RNN = MiniBatchGD(X, length(book_data), RNN, m, seq_length, ind_to_char, epoches, eta);
+aRNN = MiniBatchGD(X, length(book_data), RNN, m, seq_length, ind_to_char, epoches, eta);

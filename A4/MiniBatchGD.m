@@ -23,6 +23,7 @@ for epoch = 1:epoches
             grads.(f{1}) = max(min(grads.(f{1}), 5), -5);
         end
         % set hprev to last computed hidden state by forward pass
+        h0 = hprev;
         hprev = H(:, end);
 
         % AdaGrad
@@ -38,20 +39,28 @@ for epoch = 1:epoches
         end
 
         e = e + seq_length;
-        it = it + 1;
-%         disp(e);
-%         disp(it);
         
-        if (mod(it, 100) == 0)
+        if (or (it == 1, it == 1000))
+            disp(smooth_loss);
+        end
+        
+        if (it == 4000)
+            disp(smooth_loss);
+        end
+        
+        if (mod(it, 500) == 0)
             disp(smooth_loss);
             X_out = X(:, e:e+199);
-            Y_pre = SynthesizeText(RNN, hprev, X_out);
+            Y_pre = SynthesizeText(RNN, h0, X_out);
             chars = blanks(200);
             for i = 1:200
                 [~, k] = max(Y_pre(:,i));
                 chars(i) = ind_to_char(k);
             end
             disp(chars);
+            disp(it);
         end
+        
+        it = it + 1;
     end
 end
