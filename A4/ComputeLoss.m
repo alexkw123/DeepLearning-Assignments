@@ -1,3 +1,5 @@
+% ------- ComputeLoss.m ---------
+
 function J = ComputeLoss(X, Y, RNN, h0)
 
 [P, ~] = ForwardPass(RNN, h0, X);

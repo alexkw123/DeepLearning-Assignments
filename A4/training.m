@@ -1,3 +1,5 @@
+% ------- training.m ---------
+
 % read in the data
 book_fname = 'Datasets/goblet_book.txt';
 fid = fopen(book_fname, 'r', 'n','UTF-8');
@@ -35,15 +37,16 @@ for i=1:N
   X(char_to_ind(book_data(i)), i) = 1;
 end
 
-% h0 = zeros(m, 1);
-% X_chars = book_data(1:seq_length);
-% Y_chars = book_data(2:seq_length+1);
-% X_ind = zeros(K, seq_length);
-% Y_ind = zeros(K, seq_length);
-% for i=1:seq_length
-%   X_ind(char_to_ind(X_chars(i)), i) = 1;
-%   Y_ind(char_to_ind(Y_chars(i)), i) = 1;
-% end
+epoches = 10;
+[aRNN, sloss] = MiniBatchGD(X, length(book_data), RNN, m, seq_length, ind_to_char, epoches, eta);
 
-epoches = 7;
-aRNN = MiniBatchGD(X, length(book_data), RNN, m, seq_length, ind_to_char, epoches, eta);
+% the last part
+h0 = zeros(m, 1);
+X_out = X(:, 1:1000);
+Y_pre = SynthesizeText(aRNN, hprev, X_out);
+chars = blanks(1000);
+for i = 1:1000
+    [~, k] = max(Y_pre(:,i));
+    chars(i) = ind_to_char(k);
+end
+disp(chars);

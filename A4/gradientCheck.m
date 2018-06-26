@@ -1,3 +1,5 @@
+% ------- gradientCheck.m ---------
+
 % read in the data
 book_fname = 'Datasets/goblet_book.txt';
 fid = fopen(book_fname, 'r', 'n','UTF-8');

@@ -1,3 +1,5 @@
+% ------- SynthesizeText.m ---------
+
 function [Y] = SynthesizeText(RNN, h0, X)
 % h0: the hidden state at time 0
 % x0: the first (dummy) input vector to RNN (it can be some character like afull-stop)
@@ -16,9 +18,10 @@ for t = 1:n
     p = bsxfun(@rdivide, exp(o), sum(exp(o), 1));
     
     cp = cumsum(p);  % compute the vector containing the cumulative sum of the probabilities
-    a = rand;
-    ixs = find(cp-a >0);
+    r = rand;
+    ixs = find(cp-r >0);
     ii = ixs(1);
     
     Y(ii, t) = 1;
+    x = Y(:, t);
 end

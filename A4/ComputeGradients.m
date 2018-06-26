@@ -1,3 +1,5 @@
+% ------- ComputeGradients.m ---------
+
 function [grads] = ComputeGradients(X, Y, RNN, P, H, h0)
 
 for f = fieldnames(RNN)'
