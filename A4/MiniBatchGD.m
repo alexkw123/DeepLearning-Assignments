@@ -1,6 +1,6 @@
 % ------- MiniBatchGD.m ---------
 
-function [RNN, sloss] = MiniBatchGD(X, N, RNN, m, seq_length, ind_to_char, epoches, eta)
+function [RNN, sloss] = MiniBatchGD(X, N, RNN, m, seq_length, ind_to_char, epoches, eta, char_to_ind)
 
 it = 1; % number of iterations
 sloss = zeros(round(epoches*(N-seq_length)/seq_length),1);
@@ -17,6 +17,11 @@ for epoch = 1:epoches
     while(e <= N-seq_length-1)
         X_batch = X(:, e:e+seq_length-1);
         Y_batch = X(:, e+1:e+seq_length);
+        
+        % re-initialize hprev to default after each training tweet
+        if ismember(1, X_batch(char_to_ind('<'),:))
+            hprev = zeros(m, 1);
+        end
 
         [P, H, loss] = ForwardPass(RNN, hprev, X_batch, Y_batch);
         grads = ComputeGradients(X_batch, Y_batch, RNN, P, H, hprev);
@@ -53,16 +58,15 @@ for epoch = 1:epoches
 %         end
         
         if (or(mod(it, 10000) == 0, it==1))
-            disp(smooth_loss);
-            X_out = X(:, e:e+199);
+            disp("iteration = " + it + ", smooth_loss = " + smooth_loss);
+            X_out = X(:, e:e+139);
             Y_pre = SynthesizeText(RNN, hprev, X_out);
             chars = blanks(200);
-            for i = 1:200
+            for i = 1:140
                 [~, k] = max(Y_pre(:,i));
                 chars(i) = ind_to_char(k);
             end
             disp(chars);
-            disp(it);
         end
         
         it = it + 1;
